@@ -4,8 +4,10 @@ namespace App\controllers;
 
 use App\Session;
 use App\models\DB;
+use App\Auth;
 class auth_controller {
     public static function showLoginForm(){
+        Auth::guest();
         $cwd = getcwd();
         include $cwd . '/src/login.php';
     }
@@ -28,5 +30,10 @@ class auth_controller {
         }else{
             echo "Fail";
         }
+    }
+
+    public function logout():void{
+        Session::unset('user');
+        header('Location: /login');
     }
 }

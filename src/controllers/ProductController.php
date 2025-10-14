@@ -2,6 +2,7 @@
 namespace App\controllers;
 
 use App\models\Product;
+use Exception;
 
 class ProductController{
     
@@ -30,15 +31,41 @@ class ProductController{
         }
     }
     public function update(){
+
         $productId = $_POST['edit_product_id'];
 
+        $editProductData = [
+            'product_id' => $productId,
+            'product_name' => $_POST['edit_product_name'],
+            'price' => $_POST['edit_price'],
+            'stock' => $_POST['edit_stock'], 
+        ];
+        $productModel = new Product();
+        $product = $productModel->getSingleById($productId);
+        try{
 
-        $editProductName= $_POST['edit_product_name'];
-        $editProductPrice= $_POST['edit_price'];
-        $editProductStock= $_POST['edit_stock'];
-        
-        $product = (new Product())->getSingleById($productId);
+            $updated = $productModel->updateProduct($editProductData);
+
+            if (!$updated){
+                throw new Exception("Unsuccesful update of product with product name {$editProductData['product_name']}");
+            }
+        }catch (\Exception $e){
+            echo "Error updating product: " . $e->getMessage();
+            header("Location: /error");
+        }
+        header("Location: /inventory");
+    }
+    public function destroy():void{
+        $productId = $_POST['delete_product_id'];
+
+        try{
+            (new Product())->deleteProduct($productId);
+        }catch(Exception $e){
+            echo "Error updating product: " . $e->getMessage();
+            header("Location: /error");
+        }
 
         header("Location: /inventory");
+
     }
 }
