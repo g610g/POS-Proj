@@ -47,22 +47,21 @@ class auth_controller {
         include $cwd . '/src/views/signup.php';
     }
 
-    public  function register():void{
-        try{
-            $this->request->validate([
-                'username' => Validator::stringVal()->min(1),
-                'email' => Validator::email()->min(1),
-                'password' => Validator::stringVal()->min(1),
-                'confirm_password' => Validator::stringVal()->min(1),
-            ]);
-            $db = (new DB());
-        }catch(Exception $e){
-            header("Location: /error");
+    public function register():void{
+        $success = $this->request->validate([
+            'username' => Validator::stringVal()->min(1),
+            'email' => Validator::email()->min(1),
+            'password' => Validator::stringVal()->min(1),
+            'confirm_password' => Validator::stringVal()->min(1),
+        ]);
+        if (!$success){
+            Request::redirect('/signup');
         }
+        $db = (new DB());
     }
     public function logout():void{
         Session::unset('user');
-        header('Location: /login');
+        Request::redirect('/login');
     }
     
 }

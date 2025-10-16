@@ -4,6 +4,7 @@ namespace App;
 
 use Exception;
 use Respect\Validation\Validator; 
+use Respect\Validation\Exceptions\ValidationException;
 
 class Request{
     private array $body;
@@ -51,14 +52,28 @@ class Request{
     }
 
     public function validate(array $rules):bool{
+        $hasFailed = false;
+        $validationErrors = [];
         foreach ($rules as $key => $rule){
             //this data will validated
-            $this->requestBody;
-            if (!$rule->isValid($this->requestBody[$key])){
-                throw new Exception("Validation fails in {$key}");
+            /* if (!$rule->assert($this->requestBody[$key])){ */
+            /*     throw new Exception("Validation fails in {$key}"); */
+            /* } */
+            try{
+                $rule->assert($this->requestBody[$key]);
+            }catch(ValidationException $e) {
+                $validationErrors[$key] = $e->getFullMessage();
+                $hasFailed = true;
             }
         }
-        return true;
+        /* $validationErrors['email'] = "Deez nuts"; */
+        if ($hasFailed){
+            Session::set('validation', $validationErrors);
+        }
+        return !$hasFailed;
+    }
+    public static function redirect(string $uri):void{
+        header("Location: {$uri}");
     }
 
 }

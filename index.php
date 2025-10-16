@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/src/globals.php';
+require_once __DIR__ . '/src/middleware.php';
 
 use App\controllers\auth_controller;
 use App\controllers\DashboardController;
@@ -11,8 +13,11 @@ use App\Session;
 use App\router;
 require __DIR__ . '/vendor/autoload.php';
 
+
 //Starting the session on each request
 Session::start();
+
+invokeMiddlewares();
 
 // Simple router for PHP built-in server
 if (php_sapi_name() == "cli-server") {
@@ -22,7 +27,6 @@ if (php_sapi_name() == "cli-server") {
         return false; // serve the requested file directly
     }
 }
-// var_dump($_SERVER);
 
 $router = new router();
 
@@ -40,7 +44,6 @@ $router->post('/delete-product', [ProductController::class, 'destroy']);
 $router->post('/logout', [auth_controller::class, 'logout']);
 
 $router->dispatch();
-
 
 
 
