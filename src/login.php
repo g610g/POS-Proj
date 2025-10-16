@@ -36,7 +36,7 @@
             <h2 class="text-3xl font-extrabold text-blue-900 tracking-wide text-center">J & J Frozen Meatshop POS Login</h2>
             <p class="text-blue-700 text-lg font-medium">Welcome! Please sign in to continue.</p>
         </div>
-        <form action="#" method="post" class="space-y-6">
+        <form action="/signin" method="post" class="space-y-6">
             <div>
                 <label for="username" class="block text-sm font-bold text-blue-900">Username</label>
                 <input type="text" name="username" id="username" required class="mt-1 block w-full px-4 py-2 border-2 border-blue-200 rounded-lg shadow-sm focus:ring-blue-700 focus:border-blue-700 bg-blue-50 placeholder:text-blue-300" placeholder="Enter your username">

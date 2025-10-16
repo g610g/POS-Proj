@@ -32,7 +32,9 @@ $currentUser = Session::get('user')['username'] ?? null;
                     Welcome, Guest
                 <?php endif; ?>
             </span>
-            <button class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-4 py-2 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition">Logout</button>
+            <form action="/logout" method="POST">
+                <button type="submit" class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-4 py-2 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition">Logout</button>
+            </form>
         </div>
     </nav>
     <main class="flex-1 flex flex-col items-center p-8">
@@ -62,7 +64,14 @@ $currentUser = Session::get('user')['username'] ?? null;
                                     class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-5 py-2 rounded-xl font-bold shadow hover:from-blue-900 hover:to-red-800 transition-all duration-150 mr-2" 
                                     data-id="<?php echo htmlspecialchars($product['product_id'] ?? ''); ?>"
                                     data-name="<?php echo htmlspecialchars($product['product_name'] ?? ''); ?>"
-                                    data-price="<?php echo htmlspecialchars($product['price'] ?? ''); ?>"
+                                    data-price="<?php 
+                                    // Remove "₱", "PHP", commas, and any spaces
+                                    $clean = preg_replace('/[₱,]|PHP/i', '', $product['price']);
+
+                                    // Trim and convert to float
+                                    $value = (float) trim($clean);
+                                    echo htmlspecialchars($value ?? 0.0); 
+                                    ?>"
                                     data-stock="<?php echo htmlspecialchars($product['stock'] ?? ''); ?>"
                                     onclick="handleEditButtonClick(this)">
                                     Edit
@@ -133,12 +142,14 @@ $currentUser = Session::get('user')['username'] ?? null;
         <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center border-2 border-blue-200">
                 <h3 class="text-xl font-bold mb-4">Delete Product</h3>
-                <input type="hidden" id="delete_product_id">
-                <p class="mb-6">Are you sure you want to delete <span class="font-semibold" id="delete_product_name">this product</span>?</p>
-                <div class="flex justify-center space-x-2">
-                    <button type="button" class="bg-gray-300 px-4 py-2 rounded-lg" onclick="closeDeleteModal()">Cancel</button>
-                    <button type="button" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-red-700 transition" onclick="confirmDeleteProduct()">Delete</button>
-                </div>
+                <form action="/delete-product" method="POST">
+                    <input type="hidden" id="delete_product_id" name="delete_product_id">
+                    <p class="mb-6">Are you sure you want to delete <span class="font-semibold" id="delete_product_name">this product</span>?</p>
+                    <div class="flex justify-center space-x-2">
+                        <button type="button" class="bg-gray-300 px-4 py-2 rounded-lg" onclick="closeDeleteModal()">Cancel</button>
+                        <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-red-700 transition" onclick="confirmDeleteProduct()">Delete</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>

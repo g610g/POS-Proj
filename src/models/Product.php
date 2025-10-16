@@ -42,7 +42,7 @@ class Product{
         $stmt = $this->dbConnection->prepare("SELECT * from {$this->table} WHERE product_id = :id");
 
         $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
-        
+
         $result = $stmt->execute();
         if (!$result){
             throw new Exception("Error here");
@@ -51,9 +51,35 @@ class Product{
         return $row;
     }
     public function  updateProduct(array $data){
-        $stmt = $this->dbConnection->prepare("UPDATE {$this->table} SET price = :price, stock = :stock WHERE product_id = :id");
+        if (!isset($data['product_id']) || !isset($data['price']) || !isset($data['stock']) || !isset($data['product_name'])) {
+            throw new Exception("Missing products");
+        }
+
+        $stmt = $this->dbConnection->prepare("UPDATE {$this->table} SET price = :price, stock = :stock, product_name = :product_name WHERE product_id = :id");
+
+        $stmt->bindValue(':product_name', $data['product_name'], SQLITE3_TEXT);
         $stmt->bindValue(':id', $data['product_id'], SQLITE3_INTEGER);
         $stmt->bindValue(':stock', $data['stock'], SQLITE3_INTEGER);
         $stmt->bindValue(':price', $data['price'], SQLITE3_INTEGER);
+
+        $result = $stmt->execute();
+        /* error_log(); */
+        return $result;
+    }
+
+    public function deleteProduct(int $productId){
+
+        try{
+            $query = "DELETE from {$this->table} where product_id = :product_id";
+            $stmt = $this->dbConnection->prepare($query);
+            $stmt->bindValue(':product_id', $productId, SQLITE3_INTEGER);
+
+            $result = $stmt->execute();
+
+            return $result;
+        }catch(Exception $e){
+            throw new Exception("Error deleting product with product id: {$productId}: {$e->getMessage()}");
+        }
+
     }
 }

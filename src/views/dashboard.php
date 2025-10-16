@@ -31,7 +31,9 @@ $currentUser = Session::get('user')['username'] ?? null;
                     Welcome, Guest
                 <?php endif; ?>
             </span>
-            <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-indigo-700 transition">Logout</button>
+            <form action="/logout" method="POST">
+                <button type="submit" class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-4 py-2 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition">Logout</button>
+            </form>
         </div>
     </nav>
     <main class="flex-1 flex flex-col items-center justify-center p-8">

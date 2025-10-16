@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'c744a32c8623390ffc5ab80ddc3d564ec33c2f91',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'c744a32c8623390ffc5ab80ddc3d564ec33c2f91',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -46,11 +46,38 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'respect/stringifier' => array(
+            'pretty_version' => '0.2.0',
+            'version' => '0.2.0.0',
+            'reference' => 'e55af3c8aeaeaa2abb5fa47a58a8e9688cc23b59',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../respect/stringifier',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'respect/validation' => array(
+            'pretty_version' => '2.4.4',
+            'version' => '2.4.4.0',
+            'reference' => 'f13f10f19978aea33af2a102a2f58f2db1e63619',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../respect/validation',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'rhumsaa/uuid' => array(
             'dev_requirement' => false,
             'replaced' => array(
                 0 => '4.9.1',
             ),
+        ),
+        'symfony/polyfill-mbstring' => array(
+            'pretty_version' => 'v1.33.0',
+            'version' => '1.33.0.0',
+            'reference' => '6d857f4d76bd4b343eac26d6b539585d2bc56493',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
     ),
 );
