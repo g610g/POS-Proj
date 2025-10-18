@@ -29,22 +29,31 @@
             <form action="/signup" method="POST" class="space-y-6">
                 <div>
                     <label for="username" class="block text-gray-700 font-bold mb-2">Username</label>
-                    <input type="text" id="username" name="username"  class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="text" id="username" name="username" class="w-full px-4 py-2 border <?php echo errors('username') ? 'border-red-500' : 'border-blue-200'; ?> rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <?php if (errors('username')): ?>
+                        <p class="text-red-500"><?php echo errors('username')?></p>
+                    <?php endif; ?>
                 </div>
                 <div>
                     <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
-                    <input  id="email" name="email" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-2 border <?php echo errors('email') ? 'border-red-500' : 'border-blue-200'; ?> rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <?php if (errors('email')): ?>
                         <p class="text-red-500"><?php echo errors('email')?></p>
                     <?php endif; ?>
                 </div>
                 <div>
                     <label for="password" class="block text-gray-700 font-bold mb-2">Password</label>
-                    <input type="password" id="password" name="password" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="password" id="password" name="password" required class="w-full px-4 py-2 border <?php echo errors('password') ? 'border-red-500' : 'border-blue-200'; ?> rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <?php if (errors('password')): ?>
+                        <p class="text-red-500"><?php echo errors('password')?></p>
+                    <?php endif; ?>
                 </div>
                 <div>
                     <label for="confirm_password" class="block text-gray-700 font-bold mb-2">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="password" id="confirm_password" name="confirm_password" required class="w-full px-4 py-2 border <?php echo errors('confirm_password') ? 'border-red-500' : 'border-blue-200'; ?> rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <?php if (errors('confirm_password')): ?>
+                        <p class="text-red-500"><?php echo errors('confirm_password')?></p>
+                    <?php endif; ?>
                 </div>
                 <button type="submit" class="w-full bg-gradient-to-r from-blue-700 to-red-700 text-white py-3 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition">Sign Up</button>
             </form>

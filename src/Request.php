@@ -35,6 +35,10 @@ class Request{
         return $headers;
 
     }
+
+    public  function validated(){
+        return $this->requestBody;
+    }
     public  function getRequestBody(){
         $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
 
@@ -66,7 +70,7 @@ class Request{
                 $hasFailed = true;
             }
         }
-        /* $validationErrors['email'] = "Deez nuts"; */
+        $validationErrors['hasRead'] = false;
         if ($hasFailed){
             Session::set('validation', $validationErrors);
         }

@@ -28,19 +28,24 @@ class auth_controller {
 
         $db = (new DB());
 
-        $result = $db->insertUser($username, $password);
+        $user = $db->retrieveUser($username, $password);
+        consoleLog(json_encode($user));
 
-        if ($result){
+        //verifies the password against the password hash stored in the database
+        if (password_verify($password, $user['password'])){
             echo "Success";
             Session::set('user', [
-                'username' => $username
+                'username' => $user['username'] //add the current authenticated user's username into the session if success
             ]);
-
-            header('Location: /dashboard');
+            Request::redirect('/dashboard');  //redirect the user into the dashboard page if password checking is successful
         }else{
-            echo "Fail";
+            //actually redirect back into the login page with validation error
+            Request::redirect('/error');
+
         }
+
     }
+
 
     public  function signup():void{
         $cwd = getcwd();
@@ -57,7 +62,12 @@ class auth_controller {
         if (!$success){
             Request::redirect('/signup');
         }
+
         $db = (new DB());
+        $requestData = $this->request->validated();
+        $success = $db->createUser($requestData['username'], $requestData['password'], $requestData['email']);
+        $success ? Request::redirect('/dashboard') : Request::redirect('/error');
+
     }
     public function logout():void{
         Session::unset('user');
