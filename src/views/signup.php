@@ -57,7 +57,7 @@
                 </div>
                 <button type="submit" class="w-full bg-gradient-to-r from-blue-700 to-red-700 text-white py-3 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition">Sign Up</button>
             </form>
-            <p class="mt-6 text-center text-gray-600">Already have an account? <a href="/src/login.php" class="text-blue-700 hover:underline font-bold">Login</a></p>
+            <p class="mt-6 text-center text-gray-600">Already have an account? <a href="/login" class="text-blue-700 hover:underline font-bold">Login</a></p>
         </div>
     </main>
     <!-- Footer -->

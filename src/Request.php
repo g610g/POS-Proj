@@ -3,31 +3,33 @@
 namespace App;
 
 use Exception;
-use Respect\Validation\Validator; 
+use Respect\Validation\Validator;
 use Respect\Validation\Exceptions\ValidationException;
 
-class Request{
+class Request
+{
     private array $body;
     private array $headers;
     private $query;
     private $method;
     private $path;
     private $requestBody;
-    public function  __construct()
+    public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $this->path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
         $this->headers = $this->parseHeaders();
         $this->requestBody = $this->getRequestBody();
     }
-    private function parseHeaders(){
+    private function parseHeaders()
+    {
         $headers = [];
-        if (function_exists('getallheaders')){
+        if (function_exists('getallheaders')) {
             return getallheaders();
         }
 
-        foreach ($_SERVER as $key => $value){
-            if (str_starts_with($key, "HTTP_")){
+        foreach ($_SERVER as $key => $value) {
+            if (str_starts_with($key, "HTTP_")) {
                 $header = str_replace('_', '-', substr($key, 5));
                 $headers[$key] = $value;
             }
@@ -36,47 +38,47 @@ class Request{
 
     }
 
-    public  function validated(){
+    public function validated()
+    {
         return $this->requestBody;
     }
-    public  function getRequestBody(){
+    public function getRequestBody()
+    {
         $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
 
-        if (stripos($contentType, "application/json") !== false){
+        if (stripos($contentType, "application/json") !== false) {
             $jsonData = file_get_contents("php://input");
             return json_decode($jsonData, true);
         }
-        if (stripos($contentType, "application/x-www-form-urlencoded") !== false){
+        if (stripos($contentType, "application/x-www-form-urlencoded") !== false) {
             return $_POST;
         }
-        if (stripos($contentType, "multiform/form-data") !== false){
+        if (stripos($contentType, "multiform/form-data") !== false) {
             return $_POST + $_FILES;
         }
         return [];
     }
 
-    public function validate(array $rules):bool{
+    public function validate(array $rules): bool
+    {
         $hasFailed = false;
         $validationErrors = [];
-        foreach ($rules as $key => $rule){
-            //this data will validated
-            /* if (!$rule->assert($this->requestBody[$key])){ */
-            /*     throw new Exception("Validation fails in {$key}"); */
-            /* } */
-            try{
+        foreach ($rules as $key => $rule) {
+            try {
                 $rule->assert($this->requestBody[$key]);
-            }catch(ValidationException $e) {
+            } catch (ValidationException $e) {
                 $validationErrors[$key] = $e->getFullMessage();
                 $hasFailed = true;
             }
         }
         $validationErrors['hasRead'] = false;
-        if ($hasFailed){
+        if ($hasFailed) {
             Session::set('validation', $validationErrors);
         }
         return !$hasFailed;
     }
-    public static function redirect(string $uri):void{
+    public static function redirect(string $uri): void
+    {
         header("Location: {$uri}");
     }
 

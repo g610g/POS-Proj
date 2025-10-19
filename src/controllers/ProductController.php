@@ -1,71 +1,93 @@
 <?php
+
 namespace App\controllers;
 
+use App\Request;
 use App\models\Product;
 use Exception;
+use Respect\Validation\Validator;
 
-class ProductController{
-    
+class ProductController
+{
+    private $request;
 
+
+    public function __construct()
+    {
+        $this->request = new Request();
+    }
     //we should return back and add validation for this one
-    public function store(){
+    public function store()
+    {
 
-        $productName = $_POST['product_name'] ?? '';
-        $price = $_POST['price'] ?? 0;
-        $stock = $_POST['stock'] ?? 0;
-
-       
-
-        if ($productName && $price > 0 && $stock >= 0) {
-            // Simulate successful database insertion
-            (new Product())->insert([
-            'product_name' => $productName,
-            'price' => $price,
-            'stock' => $stock
-                ]);
-            // Redirect back to inventory page
-            header('Location: /inventory');
-        } else {
-            //I should throw exception here
-            echo "Failed to add product. Please ensure all fields are filled correctly.";
+        //validate input fields
+        $success = $this->request->validate([
+            'product_name' => Validator::stringVal()->min(1),
+            'stock' => Validator::intType(),
+            'price' => Validator::floatType()
+        ]);
+        consoleLog("product insert validation result" . json_encode($this->request->validated()));
+        if (!$success) {
+            echo "Output before header is called";
+            Request::redirect('/inventory');
         }
+
+        // Simulate successful database insertion
+        (new Product())->insert($this->request->validated());
+        // Redirect back to inventory page
+        Request::redirect('/inventory');
     }
-    public function update(){
+    public function update(): void
+    {
 
-        $productId = $_POST['edit_product_id'];
+        $success = $this->request->validate([
+            'edit_product_id' => Validator::stringVal()->min(1),
+            'edit_product_name' => Validator::nullable(Validator::stringVal()->min(1)),
+            'edit_price' => Validator::nullable(Validator::floatType()),
+            'edit_stock' => Validator::nullable(Validator::intType()),
+        ]);
 
-        $editProductData = [
-            'product_id' => $productId,
-            'product_name' => $_POST['edit_product_name'],
-            'price' => $_POST['edit_price'],
-            'stock' => $_POST['edit_stock'], 
-        ];
+
+        $editProductData = $this->request->validated();
+        consoleLog("edit product data" . json_encode($editProductData));
+
         $productModel = new Product();
-        $product = $productModel->getSingleById($productId);
-        try{
+        $product = $productModel->getSingleById($editProductData['edit_product_id']);
 
-            $updated = $productModel->updateProduct($editProductData);
+        try {
 
-            if (!$updated){
-                throw new Exception("Unsuccesful update of product with product name {$editProductData['product_name']}");
+            $updated = $productModel->updateProduct($editProductData, $product);
+
+            if (!$updated) {
+                throw new Exception("Unsuccessful update of product with product name {$editProductData['edit_product_name']}");
             }
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             echo "Error updating product: " . $e->getMessage();
-            header("Location: /error");
+            Request::redirect('/error');
+            exit(1);
         }
-        header("Location: /inventory");
+
+        Request::redirect('/inventory');
     }
-    public function destroy():void{
+    public function destroy(): void
+    {
         $productId = $_POST['delete_product_id'];
 
-        try{
-            (new Product())->deleteProduct($productId);
-        }catch(Exception $e){
+        $this->request->validate([
+            'delete_product_id' => Validator::stringVal()->min(1),
+        ]);
+
+        $data = $this->request->validated();
+        try {
+            (new Product())->deleteProduct($data['delete_product_id']);
+        } catch (Exception $e) {
             echo "Error updating product: " . $e->getMessage();
             header("Location: /error");
+            Request::redirect('/error');
+            exit(1);
         }
 
-        header("Location: /inventory");
+        Request::redirect('/inventory');
 
     }
 }

@@ -9,7 +9,7 @@ class Auth{
             exit;
         }
     }
-    
+
     public static function user(){
         return Session::get('user');
     }

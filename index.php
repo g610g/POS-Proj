@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 require_once __DIR__ . '/src/globals.php';
 require_once __DIR__ . '/src/middleware.php';
@@ -11,8 +12,10 @@ use App\TestChild;
 use App\Test;
 use App\Session;
 use App\router;
+
 require __DIR__ . '/vendor/autoload.php';
 
+ob_start(); //buffers the output until the end of the script
 
 //Starting the session on each request
 Session::start();
@@ -45,5 +48,6 @@ $router->post('/logout', [auth_controller::class, 'logout']);
 
 $router->dispatch();
 
+/* consoleLog("buffered output" . ob_get_contents()); */
 
-
+ob_flush(); //flushes the buffered output since from the start of execution of this script

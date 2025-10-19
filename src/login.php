@@ -56,6 +56,7 @@
             </div>
             <button type="submit" class="w-full flex justify-center py-3 px-6 border border-transparent rounded-lg shadow-sm text-lg font-bold text-white bg-gradient-to-r from-blue-700 to-red-700 hover:from-blue-900 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition">Sign in</button>
         </form>
+        <p class="mt-6 text-center text-gray-600">Don't have an account? <a href="/signup" class="text-blue-700 hover:underline font-bold">Signup</a></p>
         <p class="mt-6 text-center text-blue-900 text-xs font-semibold">&copy; 2025 Frozen Meatshop POS. All rights reserved.</p>
     </div>
     <script>
