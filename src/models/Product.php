@@ -38,10 +38,10 @@ class Product
     {
         $result = $this->dbConnection->query("SELECT * FROM {$this->table}");
         $products = [];
+
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
             $products[] = $row;
         }
-        consoleLog(json_encode($products));
         return $products;
     }
     public function getSingleById($id)

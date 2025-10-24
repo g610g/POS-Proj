@@ -54,6 +54,8 @@ class auth_controller
     public function signup(): void
     {
         $cwd = getcwd();
+        $cwd = getcwd();
+        include $cwd . '/src/views/signup.php';
         include $cwd . '/src/views/signup.php';
     }
 

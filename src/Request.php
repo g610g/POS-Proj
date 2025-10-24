@@ -42,6 +42,15 @@ class Request
     {
         return $this->requestBody;
     }
+    //gets the query parameter value from the current url string
+    //This currently works when the request is a GET method request
+    public function query(string $key)
+    {
+        if ($this->method !== 'GET') {
+            throw new Exception("Request query method currently works on GET method request only");
+        }
+        return $_GET[$key];
+    }
     public function getRequestBody()
     {
         $contentType = $_SERVER["CONTENT_TYPE"] ?? '';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/src/globals.php';
 require_once __DIR__ . '/src/middleware.php';
 
+use App\controllers\UserController;
 use App\controllers\auth_controller;
 use App\controllers\DashboardController;
 use App\controllers\ProductController;
@@ -37,14 +38,18 @@ $router->get('/login', [auth_controller::class, 'showLoginForm']);
 $router->get('/signup', [auth_controller::class, 'signup']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/inventory', [DashboardController::class, 'inventory']);
+$router->get('/add-user', [UserController::class, 'show']);
 $router->get('/', [LandingController::class, 'index']);
 $router->get('/error', [LandingController::class, 'error']);
+$router->get('/users', [UserController::class, 'index']);
 $router->post('/signin', [auth_controller::class, 'signin']);
 $router->post('/signup', [auth_controller::class, 'register']);
 $router->post('/add-product', [ProductController::class, 'store']);
 $router->post('/edit-product', [ProductController::class, 'update']);
 $router->post('/delete-product', [ProductController::class, 'destroy']);
+$router->post('/add-user', [UserController::class, 'store']);
 $router->post('/logout', [auth_controller::class, 'logout']);
+$router->delete('/users', [UserController::class, 'destroy']);
 
 $router->dispatch();
 
