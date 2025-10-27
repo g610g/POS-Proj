@@ -32,7 +32,6 @@
         <!-- Toast / Modal for errors -->
         <?php
             // Use App\Session helper for session/flash management
-            // require_once __DIR__ . '/../Session.php';
             use App\Session;
 
             $errorMsg = '';

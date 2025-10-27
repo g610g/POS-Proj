@@ -89,5 +89,31 @@ class UserController
         }
         Request::redirect('/users/delete');
     }
+    public function update()
+    {
+
+        $success = $this->request->validate([
+            'id' => Validator::numericVal()->min(1),
+            'email' => Validator::email()->min(1),
+            'username' => Validator::stringVal()->min(1),
+        ]);
+        if (!$success) {
+            consoleLog("Error in data validation within user delete");
+            Request::redirect('/users/edit');
+        }
+        $validatedData = $this->request->validated();
+        $userModel = new User();
+
+        try {
+            $userModel->updateUser($validatedData);
+            Request::redirect('/users');
+            return;
+        } catch (Exception $e) {
+            consoleLog($e->getMessage());
+            Session::set('error', 'Error updating user');
+            Request::redirect('/users/edit');
+        }
+
+    }
 
 }

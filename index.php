@@ -46,6 +46,7 @@ $router->get('/users/delete', [UserController::class, 'indexDestroy']);
 $router->get('/users/edit', [UserController::class, 'indexEdit']);
 
 $router->post('/delete/user', [UserController::class, 'destroy']);
+$router->post('/edit/user', [UserController::class, 'update']);
 $router->post('/signin', [auth_controller::class, 'signin']);
 $router->post('/signup', [auth_controller::class, 'register']);
 $router->post('/add-product', [ProductController::class, 'store']);

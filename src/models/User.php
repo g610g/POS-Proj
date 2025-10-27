@@ -40,7 +40,7 @@ class User
 
     }
 
-    public function deleteUser($userId)
+    public function deleteUser($userId): void
     {
         try {
             $stmt = $this->dbConnection->prepare("DELETE FROM {$this->table} WHERE id = :id"); //Deletes single user in the database using the following sql statement
@@ -54,6 +54,26 @@ class User
         } catch (Exception $e) {
             /* throw new Exception("Error deleting user: {$e->getMessage()}"); //must add a proper error handling error */
             throw $e;
+        }
+    }
+
+    public function updateUser($data): void
+    {
+        $stmt = $this->dbConnection->prepare("UPDATE {$this->table} SET 
+                username = :username,
+                email = :email
+            WHERE 
+                id = :id
+            "); //Updates a single record in the database where the id matches the id queried
+        $stmt->bindValue(':email', $data['email']);
+        $stmt->bindValue(':username', $data['username']);
+        $stmt->bindValue(':id', $data['id']);
+
+        $result = $stmt->execute();
+
+        //manually throw error in query error
+        if ($result === false) {
+            throw new Exception("Sqlite query error in deleting user with user id {$data['id']}: {$this->dbConnection->lastErrorMsg()}");
         }
     }
 
