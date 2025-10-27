@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\Request;
+use App\Session;
 use App\Views;
 use App\models\User;
 use Exception;
@@ -33,6 +34,15 @@ class UserController
         Views::render('users_add.php');
 
     }
+    public function indexDestroy()
+    {
+        Views::render('users_delete.php');
+    }
+    public function indexEdit()
+    {
+        Views::render('users_edit.php');
+    }
+
     public function store()
     {
         $success = $this->request->validate([
@@ -55,9 +65,29 @@ class UserController
         }
 
     }
+
     public function destroy()
     {
 
+        $success = $this->request->validate([
+            'user_id' => Validator::numericVal()->min(1),
+        ]);
+        if (!$success) {
+            consoleLog("Error in data validation within user delete");
+            Request::redirect('/users/delete');
+        }
+        $validatedData = $this->request->validated();
+        $userModel = new User();
+
+        try {
+            $userModel->deleteUser($validatedData['user_id']);
+            Request::redirect('/users');
+            return;
+        } catch (Exception $e) {
+            consoleLog($e->getMessage());
+            Session::set('error', 'Error deleting user');
+        }
+        Request::redirect('/users/delete');
     }
 
 }

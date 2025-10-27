@@ -51,7 +51,7 @@ $currentUser = Session::get('user')['username'] ?? null;
             <div class="bg-white bg-opacity-90 rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition">
                 <svg class="w-12 h-12 text-blue-700 mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-2a4 4 0 10-8 0 4 4 0 008 0zm6 2a4 4 0 10-8 0 4 4 0 008 0z"/></svg>
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Users</h3>
-                <a href="#" class="mt-4 bg-gradient-to-r from-blue-700 to-red-700 text-white px-6 py-2 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition text-center">Manage Users</a>
+                <a href="/users" class="mt-4 bg-gradient-to-r from-blue-700 to-red-700 text-white px-6 py-2 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition text-center">Manage Users</a>
             </div>
         </div>
         <div class="w-full max-w-4xl mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">

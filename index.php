@@ -42,6 +42,10 @@ $router->get('/add-user', [UserController::class, 'show']);
 $router->get('/', [LandingController::class, 'index']);
 $router->get('/error', [LandingController::class, 'error']);
 $router->get('/users', [UserController::class, 'index']);
+$router->get('/users/delete', [UserController::class, 'indexDestroy']);
+$router->get('/users/edit', [UserController::class, 'indexEdit']);
+
+$router->post('/delete/user', [UserController::class, 'destroy']);
 $router->post('/signin', [auth_controller::class, 'signin']);
 $router->post('/signup', [auth_controller::class, 'register']);
 $router->post('/add-product', [ProductController::class, 'store']);
@@ -49,7 +53,6 @@ $router->post('/edit-product', [ProductController::class, 'update']);
 $router->post('/delete-product', [ProductController::class, 'destroy']);
 $router->post('/add-user', [UserController::class, 'store']);
 $router->post('/logout', [auth_controller::class, 'logout']);
-$router->delete('/users', [UserController::class, 'destroy']);
 
 $router->dispatch();
 

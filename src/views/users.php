@@ -41,8 +41,11 @@
                             <td class="px-8 py-4 whitespace-nowrap text-blue-900 font-semibold border-b border-blue-100"><?php echo $user['username']?></td>
                             <td class="px-8 py-4 whitespace-nowrap text-red-700 font-bold border-b border-blue-100"><?php echo $user['email']?></td>
                             <td class="px-8 py-4 whitespace-nowrap text-center border-b border-blue-100">
-                                <a href="/src/views/users_edit.php?id=1" class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-5 py-2 rounded-xl font-bold shadow hover:from-blue-900 hover:to-red-800 transition-all duration-150 mr-2">Modify</a>
-                                <a href="/src/views/users_delete.php?id=1" class="bg-gradient-to-r from-red-700 to-blue-700 text-white px-5 py-2 rounded-xl font-bold shadow hover:from-red-900 hover:to-blue-800 transition-all duration-150">Delete</a>
+                                <a href="/users/edit?username=<?php 
+                                    echo urlencode(htmlspecialchars($user['username']));
+                                    
+                                ?>&email=<?php echo urlencode(htmlspecialchars($user['email'])) ?>" class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-5 py-2 rounded-xl font-bold shadow hover:from-blue-900 hover:to-red-800 transition-all duration-150 mr-2">Modify</a>
+                                <a href="/users/delete?user_id=<?php echo urlencode(htmlspecialchars($user['id'])); ?>" class="bg-gradient-to-r from-red-700 to-blue-700 text-white px-5 py-2 rounded-xl font-bold shadow hover:from-red-900 hover:to-blue-800 transition-all duration-150">Delete</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

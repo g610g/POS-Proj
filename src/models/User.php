@@ -16,7 +16,7 @@ class User
     public function getUsers()
     {
 
-        $result = $this->dbConnection->query("SELECT email, username from {$this->table}");
+        $result = $this->dbConnection->query("SELECT email, username, id from {$this->table}");
         $users = [];
         while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
             $users[] = $user;
@@ -46,8 +46,14 @@ class User
             $stmt = $this->dbConnection->prepare("DELETE FROM {$this->table} WHERE id = :id"); //Deletes single user in the database using the following sql statement
             $stmt->bindValue(':id', $userId);
             $result = $stmt->execute();
+
+            //manually throw error in query error
+            if ($result === false) {
+                throw new Exception("Sqlite query error in deleting user with user id {$userId}: {$this->dbConnection->lastErrorMsg()}");
+            }
         } catch (Exception $e) {
-            throw new Exception("Error deleting user: {$e->getMessage()}"); //must add a proper error handling error
+            /* throw new Exception("Error deleting user: {$e->getMessage()}"); //must add a proper error handling error */
+            throw $e;
         }
     }
 

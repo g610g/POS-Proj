@@ -26,11 +26,11 @@
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($_GET['id'] ?? ''); ?>">
                 <div>
                     <label for="username" class="block text-gray-700 font-bold mb-2">Username</label>
-                    <input type="text" id="username" name="username" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>">
+                    <input type="text" id="username" name="username" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="<?php echo htmlspecialchars($_GET['username'] ?? ''); ?>">
                 </div>
                 <div>
                     <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
-                    <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>">
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="<?php echo htmlspecialchars($_GET['email'] ?? ''); ?>">
                 </div>
                 <button type="submit" class="w-full bg-gradient-to-r from-blue-700 to-red-700 text-white py-3 rounded-lg font-bold shadow hover:from-blue-900 hover:to-red-800 transition">Save Changes</button>
             </form>
