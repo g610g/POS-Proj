@@ -35,7 +35,18 @@ class DB
 
         $result = $stmt->execute();
 
+        //result will only be false if the sql query executes.
+        if ($result === false) {
+            consoleLog("false");
+            throw new Exception("Sqlite query error in retrieving user with user/email {$usernameEmail}: {$this->database->lastErrorMsg()}");
+        }
+
         $row = $result->fetchArray(SQLITE3_ASSOC);
+
+        if ($row === false) {
+            consoleLog("false");
+            throw new Exception("Sqlite query error in retrieving user with user/email {$usernameEmail}: {$this->database->lastErrorMsg()}");
+        }
         return $row;
     }
     public function createUser(string $username, string $password, string $email)

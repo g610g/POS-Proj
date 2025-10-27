@@ -39,8 +39,6 @@
             // Use App\Session helper for session/flash management
             use App\Session;
 
-            Session::start();
-
             $errorMsg = '';
             if (Session::has('validation')) {
                 $errorMsg = htmlspecialchars(Session::get('validation'));
@@ -55,9 +53,9 @@
             }
         ?>
 
-        <div id="error-toast" aria-live="assertive" class="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 z-50" style="display: <?php echo $errorMsg ? 'flex' : 'none'; ?>;">
-            <div class="w-full flex flex-col items-center space-y-4 sm:items-end">
-                <div class="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+        <div id="error-toast" aria-live="assertive" class="fixed left-1/2 top-6 transform -translate-x-1/2 z-50 px-4 pointer-events-none" style="display: <?php echo $errorMsg ? 'block' : 'none'; ?>;">
+            <div class="mx-auto w-full max-w-md pointer-events-auto">
+                <div class="bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                     <div class="p-4">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">

@@ -32,20 +32,26 @@ class auth_controller
 
         $db = (new DB());
 
-        $user = $db->retrieveUser($username, $password);
+        try {
+            $user = $db->retrieveUser($username, $password);
+        } catch (Exception $e) {
+            Session::set('error', "User not found " . $e->getMessage());
+            Request::redirect('/login');
+            return;
+        }
+
         consoleLog(json_encode($user));
 
         //verifies the password against the password hash stored in the database
         if (password_verify($password, $user['password'])) {
-            echo "Success";
             Session::set('user', [
                 'username' => $user['username'] //add the current authenticated user's username into the session if success
             ]);
             Request::redirect('/dashboard');  //redirect the user into the dashboard page if password checking is successful
         } else {
             //actually redirect back into the login page with validation error
+            Session::set('error', 'Mismatch Credentials'); //Dont make this as a toast, instead this should be shown in the form card.
             Request::redirect('/error');
-
         }
 
     }

@@ -59,6 +59,47 @@
         <p class="mt-6 text-center text-gray-600">Don't have an account? <a href="/signup" class="text-blue-700 hover:underline font-bold">Signup</a></p>
         <p class="mt-6 text-center text-blue-900 text-xs font-semibold">&copy; 2025 Frozen Meatshop POS. All rights reserved.</p>
     </div>
+    <?php
+        // show session error flash if present
+        use App\Session;
+        $loginError = '';
+
+        if (Session::has('error')) {
+            $loginError = htmlspecialchars(Session::get('error'));
+            Session::unset('error');
+        }
+        if (Session::has('mismatch')) {
+            $loginError = htmlspecialchars(Session::get('mismatch'));
+            Session::unset('mismatch');
+        }
+    ?>
+
+    <!-- Top-center toast for login errors -->
+    <div id="login-error-toast" class="fixed left-1/2 top-6 transform -translate-x-1/2 z-50 px-4 pointer-events-none w-[400px]" style="display: <?php echo $loginError ? 'block' : 'none'; ?>;">
+        <div class="mx-auto w-full max-w-md pointer-events-auto">
+            <div class="bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+            <div class="p-4 flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                    </svg>
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p class="text-sm font-medium text-gray-900">Error</p>
+                    <p class="mt-1 text-sm text-gray-500" id="login-error-message"><?php echo $loginError; ?></p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button id="login-error-close" class="inline-flex text-gray-400 hover:text-gray-600 focus:outline-none">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
     <script>
         // Simple fade-in animation
         document.querySelector('.animate-fade-in').style.opacity = 0;
@@ -66,6 +107,16 @@
             document.querySelector('.animate-fade-in').style.transition = 'opacity 1s';
             document.querySelector('.animate-fade-in').style.opacity = 1;
         }, 100);
+    </script>
+    <script>
+        (function(){
+            const toast = document.getElementById('login-error-toast');
+            const closeBtn = document.getElementById('login-error-close');
+            if (!toast) return;
+            const autoHide = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+            if (closeBtn) closeBtn.addEventListener('click', () => { toast.style.display = 'none'; clearTimeout(autoHide); });
+
+        })();
     </script>
 </body>
 </html>
