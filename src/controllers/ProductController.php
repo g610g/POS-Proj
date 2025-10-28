@@ -3,9 +3,11 @@
 namespace App\controllers;
 
 use App\Request;
+use App\Session;
 use App\Views;
 use App\models\Product;
 use Exception;
+use NumberFormatter;
 use Respect\Validation\Validator;
 
 class ProductController
@@ -19,7 +21,15 @@ class ProductController
     }
     public function index()
     {
-        Views::render('shop.php');
+        $productModel = new Product();
+        $products = $productModel->getAll();
+        $formatter = new NumberFormatter('en_PH', NumberFormatter::CURRENCY);
+
+        $products = array_map(function ($product) use ($formatter) {
+            $formattedPrice = $formatter->formatCurrency($product['price'], 'PHP');
+            return array_merge($product, ['price' => $formattedPrice, 'product_name' => ucfirst($product['product_name'])]);
+        }, $products);
+        Views::render('shop.php', ['products' => $products]);
     }
     //we should return back and add validation for this one
     public function store()
@@ -94,5 +104,49 @@ class ProductController
 
         Request::redirect('/inventory');
 
+    }
+    public function addCart(): void
+    {
+
+        $productModel = new Product();
+        $success = $this->request->validate([
+            'product_id' => Validator::intType()->min(1),
+            'quantity' => Validator::intType()->min(1),
+        ]);
+
+        $addCartData = $this->request->validated();
+
+        //check product quantity first
+        $product = $productModel->getSingleById($addCartData['product_id']);
+
+        if (!isset($product) || !is_array($product)) {
+            Session::set('error', 'Product not found in the database');
+            Request::redirect('/shop'); //TODO:: redirect should already stop the execution of this script?
+            return;
+        }
+        if ($product['stock'] < $addCartData['quantity']) {
+            Session::set('error', 'Product quantity is insufficient');
+            Request::redirect('/shop'); //TODO:: redirect should already stop the execution of this script?
+            return;
+        }
+
+        $cartData = Session::get('cart') ?? []; //NOTE:: cart is an array of products where each product element is composed of [id, quantity, total_amount]
+
+        $existingProduct = $cartData[$addCartData['product_id']] ?? [];
+
+        $newTotalQuantity = ($existingProduct['quantity'] ?? 0) + $addCartData['quantity'];
+
+        $newTotalAmount =  ($existingProduct['total_amount'] ?? 0.0) + ($addCartData['quantity'] * $product['price']);
+
+        $existingProduct = array_merge($existingProduct, ['id' => $addCartData['product_id'], 'quantity' => $newTotalQuantity, 'total_amount' => $newTotalAmount]);
+
+        //NOTE:: update cart data
+        $cartData[$addCartData['product_id']] = $existingProduct;
+        Session::set('cart', $cartData);
+
+        //NOTE:: we will only update product stocks when this is checkedout
+
+
+        Request::redirect('/shop');
     }
 }

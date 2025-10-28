@@ -5,6 +5,14 @@ use App\Session;
 Session::start();
 $currentUser = Session::get('user')['username'] ?? null;
 
+// compute cart count from session
+$cartCount = 0;
+$cart = Session::get('cart');
+if ($cart) {
+    var_dump($cart);
+    $cartCount = count($cart);
+}
+
 // If controller provides $products, use it. Otherwise fall back to example products.
 if (!isset($products) || !is_array($products)) {
     $products = [
@@ -34,11 +42,16 @@ if (!isset($products) || !is_array($products)) {
         </div>
         <div class="flex items-center space-x-6">
             <a href="/" class="text-blue-700 font-medium">Home</a>
-            <a href="/cart" class="text-blue-700 font-medium">Cart</a>
+            <a href="/cart" class="relative inline-flex items-center text-blue-700 font-medium">
+                Cart
+                <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                    <?php echo $cartCount; ?>
+                </span>
+            </a>
             <?php if ($currentUser): ?>
                 <span class="text-blue-900">Welcome, <span class="font-bold text-red-700"><?php echo htmlspecialchars($currentUser); ?></span></span>
             <?php else: ?>
-                <a href="/src/login.php" class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-4 py-2 rounded-lg font-bold shadow">Login</a>
+                <a href="/login" class="bg-gradient-to-r from-blue-700 to-red-700 text-white px-4 py-2 rounded-lg font-bold shadow">Login</a>
             <?php endif; ?>
         </div>
     </nav>

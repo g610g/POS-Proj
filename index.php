@@ -47,6 +47,8 @@ $router->get('/users/edit', [UserController::class, 'indexEdit']);
 $router->get('/shop', [ProductController::class, 'index']);
 
 
+
+$router->post('/cart/add', [ProductController::class, 'addCart']);
 $router->post('/delete/user', [UserController::class, 'destroy']);
 $router->post('/edit/user', [UserController::class, 'update']);
 $router->post('/signin', [auth_controller::class, 'signin']);
