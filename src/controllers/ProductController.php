@@ -138,14 +138,13 @@ class ProductController
 
         $newTotalAmount =  ($existingProduct['total_amount'] ?? 0.0) + ($addCartData['quantity'] * $product['price']);
 
-        $existingProduct = array_merge($existingProduct, ['id' => $addCartData['product_id'], 'quantity' => $newTotalQuantity, 'total_amount' => $newTotalAmount]);
+        $existingProduct = array_merge($existingProduct, ['id' => $addCartData['product_id'], 'quantity' => $newTotalQuantity, 'total_amount' => $newTotalAmount, 'product_name' => $product['product_name']]);
 
         //NOTE:: update cart data
         $cartData[$addCartData['product_id']] = $existingProduct;
         Session::set('cart', $cartData);
 
         //NOTE:: we will only update product stocks when this is checkedout
-
 
         Request::redirect('/shop');
     }

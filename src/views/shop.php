@@ -9,7 +9,6 @@ $currentUser = Session::get('user')['username'] ?? null;
 $cartCount = 0;
 $cart = Session::get('cart');
 if ($cart) {
-    var_dump($cart);
     $cartCount = count($cart);
 }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/src/globals.php';
 require_once __DIR__ . '/src/middleware.php';
 
+use App\controllers\CartController;
 use App\controllers\UserController;
 use App\controllers\auth_controller;
 use App\controllers\DashboardController;
@@ -45,6 +46,7 @@ $router->get('/users', [UserController::class, 'index']);
 $router->get('/users/delete', [UserController::class, 'indexDestroy']);
 $router->get('/users/edit', [UserController::class, 'indexEdit']);
 $router->get('/shop', [ProductController::class, 'index']);
+$router->get('/cart', [CartController::class, 'index']);
 
 
 
