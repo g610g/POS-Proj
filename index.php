@@ -44,6 +44,8 @@ $router->get('/error', [LandingController::class, 'error']);
 $router->get('/users', [UserController::class, 'index']);
 $router->get('/users/delete', [UserController::class, 'indexDestroy']);
 $router->get('/users/edit', [UserController::class, 'indexEdit']);
+$router->get('/shop', [ProductController::class, 'index']);
+
 
 $router->post('/delete/user', [UserController::class, 'destroy']);
 $router->post('/edit/user', [UserController::class, 'update']);

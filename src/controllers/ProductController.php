@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\Request;
+use App\Views;
 use App\models\Product;
 use Exception;
 use Respect\Validation\Validator;
@@ -15,6 +16,10 @@ class ProductController
     public function __construct()
     {
         $this->request = new Request();
+    }
+    public function index()
+    {
+        Views::render('shop.php');
     }
     //we should return back and add validation for this one
     public function store()
