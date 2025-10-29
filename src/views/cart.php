@@ -1,14 +1,13 @@
 <?php
+
 use App\Session;
-Session::start();
 
 $cart = Session::get('cart') ?? [];
-// Normalize cart to array of items: ['product_id'=>..., 'name'=>..., 'price'=>..., 'quantity'=>...]
 $items = [];
 if (is_array($cart)) {
     // Case: associative by id or list of items
     foreach ($cart as $k => $v) {
-        if (is_array($v) && isset($v['id'])) {
+        if (is_array($v)) {
             $items[] = $v;
         }
     }
@@ -33,13 +32,13 @@ if (is_array($cart)) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $total = 0; foreach ($items as $it): ?>
-                        <?php $qty = (int)($it['quantity'] ?? 1); $price = floatval(preg_replace('/[^0-9\.]/','', $it['price'] ?? 0)); $sub = $qty * $price; $total += $sub; ?>
+                    <?php foreach ($items as $it): ?>
+                        <?php?>
                         <tr class="border-t">
                             <td class="px-4 py-3 font-semibold text-blue-900"><?php echo htmlspecialchars($it['product_name'] ?? 'Item'); ?></td>
-                            <td class="px-4 py-3 text-red-700"><?php echo isset($it['price']) ? htmlspecialchars($it['price']) : '₱0.00'; ?></td>
-                            <td class="px-4 py-3"><?php echo $qty; ?></td>
-                            <td class="px-4 py-3 text-gray-800">₱<?php echo number_format($sub,2); ?></td>
+                            <td class="px-4 py-3 text-red-700"><?php echo isset($it['price']) ? htmlspecialchars(\encodePrice($it['price'])) : '₱0.00'; ?></td>
+                            <td class="px-4 py-3"><?php echo $it['quantity']; ?></td>
+                            <td class="px-4 py-3 text-gray-800">₱<?php echo number_format($it['total_amount'],2); ?></td>
                             <td class="px-4 py-3">
                                 <form action="/cart/remove" method="POST" class="inline">
                                     <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($it['product_id'] ?? ''); ?>">

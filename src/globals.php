@@ -24,5 +24,10 @@ function extractPriceString(string $priceString)
     // Trim and convert to float
     $value = (float) trim($clean);
     return $value ?? 0.0;
+}
 
+function encodePrice(float $price): string
+{
+    $formatter = new NumberFormatter('en_PH', NumberFormatter::CURRENCY);
+    return $formatter->formatCurrency($price, 'PHP');
 }

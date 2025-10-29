@@ -50,6 +50,7 @@ $router->get('/cart', [CartController::class, 'index']);
 
 
 
+$router->post('/cart/remove', [CartController::class, 'removeCartItem']);
 $router->post('/cart/add', [ProductController::class, 'addCart']);
 $router->post('/delete/user', [UserController::class, 'destroy']);
 $router->post('/edit/user', [UserController::class, 'update']);
