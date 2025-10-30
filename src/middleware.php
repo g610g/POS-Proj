@@ -2,18 +2,18 @@
 
 use App\Session;
 
-//This class clears the validation error bag 
-class ValidationErrorMiddleware{
-    public function  __invoke(): void
+//This class clears the validation error bag
+class ValidationErrorMiddleware
+{
+    public function __invoke(): void
     {
-        if (!Session::has('validation')){
+        if (!Session::has('validation')) {
             return;
         }
 
         $validationData = Session::get('validation');
-        if (($validationData['hasRead'] ?? false)){
+        if (($validationData['hasRead'] ?? false)) {
             Session::unset('validation');
-            return;
         }
 
         $validationData['hasRead'] = true;
@@ -21,7 +21,8 @@ class ValidationErrorMiddleware{
 
     }
 }
-class Middleware{
+class Middleware
+{
     private $value;
     public function __construct(string $value)
     {
@@ -37,7 +38,8 @@ class Middleware{
     }
 }
 
-function invokeMiddlewares(){
+function invokeMiddlewares()
+{
     /* $middlewares = [ */
     /*     new Middleware('1'), */
     /*     new Middleware('2'), */
@@ -52,4 +54,3 @@ function invokeMiddlewares(){
     /* echo $action('value'); */
     (new ValidationErrorMiddleware())();
 }
-

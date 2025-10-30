@@ -21,7 +21,6 @@ ob_start(); //buffers the output until the end of the script
 
 //Starting the session on each request
 Session::start();
-
 invokeMiddlewares();
 
 // Simple router for PHP built-in server
@@ -50,6 +49,7 @@ $router->get('/cart', [CartController::class, 'index']);
 
 
 
+$router->post('/cart/checkout', [CartController::class, 'checkout']);
 $router->post('/cart/remove', [CartController::class, 'removeCartItem']);
 $router->post('/cart/add', [ProductController::class, 'addCart']);
 $router->post('/delete/user', [UserController::class, 'destroy']);

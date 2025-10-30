@@ -3,6 +3,7 @@
 namespace App\models;
 
 use Exception;
+use PDO;
 
 //Database instance here
 class DB
@@ -15,12 +16,14 @@ class DB
 
             $cwd = getcwd();
             $dbFile = $cwd . '/database/database.db';
-            $this->database = new \SQLite3($dbFile);
+            /* $this->database = new \SQLite3($dbFile); */
+            $this->database = new \PDO("sqlite:" . $dbFile); //NOTE::Using sqlite database here
+            $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //NOTE:: flags PDO to throw error in queries
         } catch (Exception $e) {
             die("Database connection failed: " .  $e->getMessage());
         }
     }
-    public function getConnection()
+    public function getConnection(): PDO
     {
         return $this->database;
     }

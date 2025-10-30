@@ -4,6 +4,7 @@ namespace App\models;
 
 use App\models\DB;
 use Exception;
+use PDO;
 
 class Product
 {
@@ -34,44 +35,37 @@ class Product
             return false;
         }
     }
+
     public function getAll()
     {
         $result = $this->dbConnection->query("SELECT * FROM {$this->table}");
-        $products = [];
 
-        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $products[] = $row;
-        }
-        return $products;
+        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function getSingleById($id)
     {
-        $stmt = $this->dbConnection->prepare("SELECT * from {$this->table} WHERE product_id = :id");
+        $stmt = $this->dbConnection->prepare("SELECT * from {$this->table} WHERE product_id = :id LIMIT 1");
 
-        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
-
-        $result = $stmt->execute();
-        if (!$result) {
-            throw new Exception("Error here");
-        }
-        $row = $result->fetchArray(SQLITE3_ASSOC);
+        $result = $stmt->execute([':id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row;
     }
 
-    public function updateProduct(array $data, array $product)
+    public function updateProduct(array $data, array $product, ?PDO $dbConnection)
     {
+        if ($dbConnection) {
+            $this->dbConnection = $dbConnection;
+        }
 
         try {
-
             $stmt = $this->dbConnection->prepare("UPDATE {$this->table} SET price = :price, stock = :stock, product_name = :product_name WHERE product_id = :id");
-
-            $stmt->bindValue(':id', $data['edit_product_id'], SQLITE3_INTEGER);
-            $stmt->bindValue(':product_name', $data['edit_product_name'] ?? $product['product_name'], SQLITE3_TEXT);
-            $stmt->bindValue(':stock', $data['edit_stock'] ?? $product['stock'], SQLITE3_INTEGER);
-            $stmt->bindValue(':price', $data['edit_price'] ?? $product['price'], SQLITE3_INTEGER);
-
-            $result = $stmt->execute();
-
+            $result = $stmt->execute([
+                ':id' => $data['edit_product_id'],
+                ':product_name' => $data['edit_product_name'],
+                ':stock' => $data['edit_stock'],
+                ':price' => $data['edit_price'],
+            ]);
             return $result;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
