@@ -44,7 +44,7 @@ class DB
             throw new Exception("Sqlite query error in retrieving user with user/email {$usernameEmail}: {$this->database->lastErrorMsg()}");
         }
 
-        $row = $result->fetchArray(SQLITE3_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row === false) {
             consoleLog("false");

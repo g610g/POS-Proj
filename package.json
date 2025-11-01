@@ -1,0 +1,24 @@
+{
+    "name": "pos",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/g610g/POS-Proj.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/g610g/POS-Proj/issues"
+    },
+    "homepage": "https://github.com/g610g/POS-Proj#readme",
+    "dependencies": {
+        "@cubejs-client/core": "^1.5.0"
+    },
+    "devDependencies": {
+        "vite": "^7.1.12"
+    }
+}

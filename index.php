@@ -46,6 +46,8 @@ $router->get('/users/delete', [UserController::class, 'indexDestroy']);
 $router->get('/users/edit', [UserController::class, 'indexEdit']);
 $router->get('/shop', [ProductController::class, 'index']);
 $router->get('/cart', [CartController::class, 'index']);
+$router->get('/sales', [DashboardController::class, 'sales']);
+$router->get('/sales/data', [ProductController::class, 'sales']);
 
 
 

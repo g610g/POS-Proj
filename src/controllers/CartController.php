@@ -24,7 +24,7 @@ class CartController
     {
 
         $cartData = Session::get('cart', []);
-        $totalPrice = array_reduce($cartData, function (float $carry, array $item) {
+        $totalPrice = array_reduce($cartData ?? [], function (float $carry, array $item) {
             return $carry + $item['total_amount'];
         }, 0.0);
         Views::render('cart.php', ['total' => $totalPrice]);

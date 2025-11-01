@@ -1,7 +1,9 @@
 <?php
-// layout.php - shared layout with sidebar
+// layout.php - shared layout with sidebar or top-nav
 use App\Session;
+
 $currentUser = Session::get('user')['username'] ?? null;
+$layoutMode = $layoutMode ?? 'sidebar';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +12,9 @@ $currentUser = Session::get('user')['username'] ?? null;
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?php echo htmlspecialchars($pageTitle ?? 'POS'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="http://localhost:5173/src/main.js" type="module"></script>
+    <!-- <script src="src/scripts/chart.js" type="module"></script> -->
     <style>body{background:linear-gradient(135deg,#e3f2fd 0%,#b3e5fc 60%,#b71c1c 100%);}</style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-200 via-white to-red-200 flex">
@@ -74,11 +79,11 @@ $currentUser = Session::get('user')['username'] ?? null;
          <?php
         // Use App\Session for flashes
         $errorMsg = '';
-        if (Session::has('error')) {
-            $errorMsg = htmlspecialchars(Session::get('error'));
-            Session::unset('error');
-        }
-    ?>
+if (Session::has('error')) {
+    $errorMsg = htmlspecialchars(Session::get('error'));
+    Session::unset('error');
+}
+?>
         <!-- Top-center toast for signup errors -->
     <div id="signup-error-toast" class="fixed left-1/2 top-6 transform -translate-x-1/2 z-50 px-4 pointer-events-none w-[400px]" style="display: <?php echo $errorMsg ? 'block' : 'none'; ?>;">
         <div class="mx-auto w-full max-w-md pointer-events-auto">

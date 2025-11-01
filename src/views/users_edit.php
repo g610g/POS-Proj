@@ -42,6 +42,7 @@
             $errorMsg = '';
             if (Session::has('validation')) {
                 $errorMsg = htmlspecialchars(Session::get('validation'));
+                // var_dump(Session::get('validation'));
                 // clear flash
                 Session::unset('validation');
             }

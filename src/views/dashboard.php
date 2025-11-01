@@ -61,7 +61,7 @@ $currentUser = Session::get('user')['username'] ?? null;
             </div>
             <div class="bg-white bg-opacity-90 rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition">
                 <h4 class="text-lg font-bold text-gray-700 mb-2">Inventory Items</h4>
-                <p class="text-3xl font-extrabold text-indigo-600">0</p>
+                <p class="text-3xl font-extrabold text-indigo-600"><?php echo htmlspecialchars($total_products)?></p>
             </div>
         </div>
     </main>

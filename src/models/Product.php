@@ -52,7 +52,7 @@ class Product
         return $row;
     }
 
-    public function updateProduct(array $data, array $product, ?PDO $dbConnection)
+    public function updateProduct(array $data, array $product, ?PDO $dbConnection = null)
     {
         if ($dbConnection) {
             $this->dbConnection = $dbConnection;
@@ -87,5 +87,47 @@ class Product
             throw new Exception("Error deleting product with product id: {$productId}: {$e->getMessage()}");
         }
 
+    }
+
+    public function getSalesDaily(?string $month = null)
+    {
+        $query = "SELECT * from orders WHERE (
+            (order_date)>= datetime('now', 'start of month')
+            AND
+            (order_date) < datetime('now','start of month', '+1 month')
+        )";
+        try {
+
+            $stmt = $this->dbConnection->query($query);
+            if ($stmt === false) {
+                throw new Exception("false statement in sales daily");
+            }
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    public function getSalesMonthly(?string $month = null)
+    {
+        $query = "SELECT * from orders WHERE (
+            (order_date)>= datetime('now', 'start of year')
+            AND
+            (order_date) < datetime('now','start of year', '+1 year')
+        )";
+        try {
+            $stmt = $this->dbConnection->query($query);
+            if ($stmt === false) {
+                throw new Exception("false statement in sales daily");
+            }
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }

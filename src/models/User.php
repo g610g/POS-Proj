@@ -3,6 +3,7 @@
 namespace App\models;
 
 use Exception;
+use PDO;
 
 class User
 {
@@ -17,10 +18,7 @@ class User
     {
 
         $result = $this->dbConnection->query("SELECT email, username, id from {$this->table}");
-        $users = [];
-        while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
-            $users[] = $user;
-        }
+        $users = $result->fetchAll(PDO::FETCH_ASSOC);
 
         return $users;
 

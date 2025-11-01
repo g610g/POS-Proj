@@ -29,6 +29,10 @@ class ProductController
             $formattedPrice = $formatter->formatCurrency($product['price'], 'PHP');
             return array_merge($product, ['price' => $formattedPrice, 'product_name' => ucfirst($product['product_name'])]);
         }, $products);
+
+        $products = array_filter($products, function ($product) {
+            return $product['stock'] > 0;
+        });
         Views::render('shop.php', ['products' => $products]);
     }
     //we should return back and add validation for this one
@@ -153,4 +157,61 @@ class ProductController
 
         Request::redirect('/shop');
     }
+    public function sales()
+    {
+        $productModel = (new Product());
+        //NOTE:: Check view first. View will be one of the following: Yearly, Monthly, and Daily
+        header("Content-Type: application/json; charset=utf-8"); //NOTE::we want to return json
+
+        try {
+            $view = $this->request->query('view');
+            switch ($view) {
+                case 'daily':
+                    try {
+                        $dailySales = $productModel->getSalesDaily();
+                        $groupedDailySales = $this->categorizeDay($dailySales);
+                    } catch (Exception $e) {
+                        consoleLog($e->getMessage());
+                    }
+                    echo json_encode($groupedDailySales);
+                    exit;
+                case 'monthly':
+                    try {
+                        $monthlySales = $productModel->getSalesMonthly();
+                        $groupedMonthlySales = $this->categorizeMonth($monthlySales);
+                    } catch (Exception $e) {
+                        consoleLog($e->getMessage());
+                    }
+                    echo json_encode($groupedMonthlySales);
+                    exit;
+                case 'yearly':
+                    break;
+            }
+
+        } catch (Exception $e) {
+            consoleLog("Error in sales" . $e->getMessage()); //NOTE:: Error here
+        }
+    }
+    private function categorizeDay(array $dailySales)
+    {
+        $groupedSales = [];
+        foreach ($dailySales as $sale) {
+            $day = (int)date('d', strtotime($sale['order_date']));
+
+            $groupedSales[$day][] = $sale;
+        }
+        return $groupedSales;
+    }
+
+    private function categorizeMonth(array $sales): array
+    {
+        $groupedSales = [];
+        foreach ($sales as $sale) {
+            $month = date('M', strtotime($sale['order_date']));
+
+            $groupedSales[$month][] = $sale;
+        }
+        return $groupedSales;
+    }
+
 }

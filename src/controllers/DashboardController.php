@@ -13,7 +13,10 @@ class DashboardController
     {
         // Logic to display the dashboard
         Auth::requireAuth();
-        Views::render('dashboard.php');
+        $products = (new Product())->getAll();
+        $productsCount = count($products);
+        //Missing todays sales
+        Views::render('dashboard.php', ['total_products' => $productsCount]);
     }
     public function inventory()
     {
@@ -28,5 +31,10 @@ class DashboardController
 
 
         Views::render('inventory.php', ['products' => $products]);
+    }
+    public function sales()
+    {
+        Views::render('sales.php');
+
     }
 }
