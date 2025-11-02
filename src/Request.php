@@ -62,9 +62,11 @@ class Request
         if (stripos($contentType, "application/x-www-form-urlencoded") !== false) {
             return $_POST;
         }
-        if (stripos($contentType, "multiform/form-data") !== false) {
-            return $_POST + $_FILES;
+        // ✅ Corrected this part for file + text form submissions
+        if (stripos($contentType, "multipart/form-data") !== false) {
+            return array_merge($_POST, $_FILES);
         }
+
         return [];
     }
 

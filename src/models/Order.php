@@ -37,4 +37,36 @@ class Order
 
 
     }
+    public function getJoinedOrderItems(): array
+    {
+        $joinQuery = "SELECT * FROM orders
+            inner join order_items on order_items.order_id = orders.order_id;";
+        try {
+
+            $stmt = $this->dbConnection->prepare($joinQuery);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            throw $e;
+        }
+    }
+    public function getTodaySales(): array
+    {
+        $query = "SELECT * from orders WHERE (
+            date(order_date) = date('now')
+        )";
+
+        try {
+            $stmt = $this->dbConnection->query($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            throw $e;
+        }
+
+    }
+
+
 }

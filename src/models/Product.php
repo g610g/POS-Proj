@@ -5,6 +5,7 @@ namespace App\models;
 use App\models\DB;
 use Exception;
 use PDO;
+use PDOException;
 
 class Product
 {
@@ -21,16 +22,19 @@ class Product
             $name = trim($data['product_name'] ?? '');
             $price = floatval($data['price'] ?? 0);
             $stock = intval($data['stock'] ?? 0);
+            $product_image = $data['product_image'];
 
 
-            $stmt = $this->dbConnection->prepare("INSERT INTO {$this->table} (product_name, price, stock) VALUES (:product_name, :price, :stock)");
+            consoleLog($product_image);
+            $stmt = $this->dbConnection->prepare("INSERT INTO {$this->table} (product_name, price, stock, product_picture_path) VALUES (:product_name, :price, :stock, :product_picture_path)");
             $stmt->bindValue(':product_name', $name);
             $stmt->bindValue(':price', $price);
             $stmt->bindValue(':stock', $stock);
+            $stmt->bindValue(':product_picture_path', $product_image);
 
             $success = $stmt->execute();
             return $success;
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             consoleLog($e->getMessage());
             return false;
         }
@@ -91,6 +95,7 @@ class Product
 
     public function getSalesDaily(?string $month = null)
     {
+        //NOTE::SQL query to retrieve daily sales data within the month
         $query = "SELECT * from orders WHERE (
             (order_date)>= datetime('now', 'start of month')
             AND
@@ -112,8 +117,31 @@ class Product
     }
     public function getSalesMonthly(?string $month = null)
     {
+        //NOTE::SQL query to retrieve monthly sales data within the current year
         $query = "SELECT * from orders WHERE (
             (order_date)>= datetime('now', 'start of year')
+            AND
+            (order_date) < datetime('now','start of year', '+1 year')
+        )";
+        try {
+            $stmt = $this->dbConnection->query($query);
+            if ($stmt === false) {
+                throw new Exception("false statement in sales daily");
+            }
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    public function getSalesYearly()
+    {
+
+        //NOTE::SQL query to retrieve sales data that are 10 years before up to current year
+        $query = "SELECT * from orders WHERE (
+            (order_date)>= datetime('now', 'start of year', '-10 years')
             AND
             (order_date) < datetime('now','start of year', '+1 year')
         )";

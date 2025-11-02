@@ -13,13 +13,12 @@ $layoutMode = $layoutMode ?? 'sidebar';
     <title><?php echo htmlspecialchars($pageTitle ?? 'POS'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="http://localhost:5173/src/main.js" type="module"></script>
-    <!-- <script src="src/scripts/chart.js" type="module"></script> -->
+    <script src="http://localhost:5173/src/scripts/utils.js" type="module"></script>
     <style>body{background:linear-gradient(135deg,#e3f2fd 0%,#b3e5fc 60%,#b71c1c 100%);}</style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-200 via-white to-red-200 flex">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white bg-opacity-95 border-r border-blue-100 hidden md:flex flex-col">
+    <aside class="w-64 bg-white bg-opacity-95 border-r border-blue-100 hidden md:flex flex-col h-screen sticky top-0 flex-shrink-0">
         <div class="p-6 border-b border-blue-100">
             <h2 class="text-2xl font-bold text-blue-900">Frozen Meatshop</h2>
             <?php if ($currentUser): ?>
@@ -55,7 +54,7 @@ $layoutMode = $layoutMode ?? 'sidebar';
     </header>
 
     <!-- Main content area -->
-    <div class="flex-1 min-h-screen">
+    <div class="flex-1 min-h-screen flex flex-col">
         <div id="mobile-sidebar" class="md:hidden hidden bg-white bg-opacity-95 border-b border-blue-100 p-4">
             <a href="/" class="block px-4 py-2">Home</a>
             <a href="/shop" class="block px-4 py-2">Shop</a>
@@ -65,7 +64,7 @@ $layoutMode = $layoutMode ?? 'sidebar';
             <a href="/dashboard" class="block px-4 py-2">Dashboard</a>
         </div>
 
-        <main class="p-8">
+    <main class="p-8 flex-1 overflow-auto">
             <?php if (!empty($pageTitle)): ?>
                 <div class="mb-6 flex items-center justify-between">
                     <h1 class="text-2xl font-extrabold text-blue-900"><?php echo htmlspecialchars($pageTitle); ?></h1>

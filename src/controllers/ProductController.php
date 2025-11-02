@@ -43,16 +43,37 @@ class ProductController
         $success = $this->request->validate([
             'product_name' => Validator::stringVal()->min(1),
             'stock' => Validator::intType(),
-            'price' => Validator::floatType()
+            'price' => Validator::floatType(),
+            'product_image' => Validator::file()
+                            ->image()
+                            ->size('1MB', '2MB')
         ]);
-        consoleLog("product insert validation result" . json_encode($this->request->validated()));
+
+        $validated = $this->request->validated();
+        consoleLog("product insert validation result" . json_encode($validated));
+
         if (!$success) {
             echo "Output before header is called";
+            consoleLog(json_encode(Session::get('validation')));
             Request::redirect('/inventory');
         }
 
+        //NOTE:: process the uploaded product picture
+        $successFile = $this->processUploadedFile($validated['product_image']);
+        if (is_string($successFile)) {
+            $validated['product_image'] = $successFile;
+        } else {
+            consoleLog("File not moved");
+            $validated['product_image'] = null;
+        }
+
         // Simulate successful database insertion
-        (new Product())->insert($this->request->validated());
+        $sucessInsert = (new Product())->insert($validated);
+        if (!$sucessInsert) {
+            Session::set('error', 'Error during insertion of product');
+            Request::redirect('/inventory');
+
+        }
         // Redirect back to inventory page
         Request::redirect('/inventory');
     }
@@ -185,7 +206,14 @@ class ProductController
                     echo json_encode($groupedMonthlySales);
                     exit;
                 case 'yearly':
-                    break;
+                    try {
+                        $yearlySales = $productModel->getSalesYearly();
+                        $groupedYearlySales = $this->categorizeYearly($yearlySales);
+                    } catch (Exception $e) {
+                        consoleLog($e->getMessage());
+                    }
+                    echo json_encode($groupedYearlySales);
+                    exit;
             }
 
         } catch (Exception $e) {
@@ -195,23 +223,80 @@ class ProductController
     private function categorizeDay(array $dailySales)
     {
         $groupedSales = [];
+        for ($d = 1; $d <= 30; $d++) {
+            $groupedSales[$d] = [];
+        }
         foreach ($dailySales as $sale) {
             $day = (int)date('d', strtotime($sale['order_date']));
 
             $groupedSales[$day][] = $sale;
         }
+        $groupedSales = array_map(function ($sales, $key) {
+            return [
+                "key" => $key,
+                "sales" => $sales,
+            ];
+        }, $groupedSales, array_keys($groupedSales));
+
         return $groupedSales;
     }
 
     private function categorizeMonth(array $sales): array
     {
+
         $groupedSales = [];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $month = date('M', mktime(0, 0, 0, $m, 1, date('Y')));
+            $groupedSales[$month] = [];
+        }
         foreach ($sales as $sale) {
             $month = date('M', strtotime($sale['order_date']));
-
             $groupedSales[$month][] = $sale;
         }
+        $groupedSales = array_map(function ($monthSale, $monthKey) {
+            return [
+                "key" => $monthKey,
+                "sales" => $monthSale
+            ];
+        }, $groupedSales, array_keys($groupedSales));
+        return $groupedSales;
+    }
+    private function categorizeYearly(array $sales): array
+    {
+        $groupedSales = [];
+        $years = range(date('Y') - 10, date('Y'));
+
+        foreach ($years as $year) {
+            $groupedSales[$year] = [];
+        }
+
+        foreach ($sales as $sale) {
+            $year = date('Y', strtotime($sale['order_date']));
+            $groupedSales[$year][] = $sale;
+
+        }
+        $groupedSales = array_map(function ($yearSale, $years) {
+            return [
+                "key" => $years,
+                "sales" => $yearSale
+            ];
+        }, $groupedSales, array_keys($groupedSales));
         return $groupedSales;
     }
 
+    private function processUploadedFile($file)
+    {
+        $cwd = getcwd();
+
+        consoleLog(json_encode($file));
+        $originalFilename = $file['name'];
+        $tmpPath = $file['tmp_name'];
+        $assetDir = "/public/assets/";
+
+        if (move_uploaded_file($tmpPath, $cwd . $assetDir . $originalFilename)) {
+            return $assetDir . $originalFilename;
+        }
+        return false;
+    }
 }

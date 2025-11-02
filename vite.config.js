@@ -6,7 +6,7 @@ export default {
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "public/assets"), // So "@/components" points here
+      "@": path.resolve(__dirname, "src"), // So "@/components" points here
     },
   },
 };

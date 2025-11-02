@@ -93,7 +93,7 @@ $currentUser = Session::get('user')['username'] ?? null;
         <div id="addModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md border-2 border-blue-200">
                 <h3 class="text-xl font-bold mb-4">Add Product</h3>
-                <form action="/add-product" method="POST">
+                <form action="/add-product" method="POST" enctype="multipart/form-data">
                     <div class="mb-4">
                         <label class="block text-gray-700 mb-2">Product Name</label>
                         <input name="product_name" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter product name">
@@ -105,6 +105,10 @@ $currentUser = Session::get('user')['username'] ?? null;
                     <div class="mb-4">
                         <label class="block text-gray-700 mb-2">Stock</label>
                         <input name="stock" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter stock">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Product Image</label>
+                        <input name="product_image" type="file" accept="image/*" class="w-full" />
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="button" class="bg-gray-300 px-4 py-2 rounded-lg" onclick="closeAddModal()">Cancel</button>

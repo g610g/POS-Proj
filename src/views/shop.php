@@ -53,8 +53,8 @@ ob_start();
                     <?php if ($p['stock'] > 0):?>
                         <div class="bg-white rounded-2xl shadow p-4 flex flex-col">
                             <div class="h-40 w-full rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center mb-4">
-                                <?php if (!empty($p['image'])): ?>
-                                    <img src="<?php echo htmlspecialchars($p['image']); ?>" alt="<?php echo htmlspecialchars($p['product_name']); ?>" class="h-full object-contain">
+                                <?php if (!is_null($p['product_picture_path'])): ?>
+                                    <img src="<?php echo htmlspecialchars($p['product_picture_path']); ?>" alt="<?php echo htmlspecialchars($p['product_name']); ?>" class="h-full object-cover">
                                 <?php else: ?>
                                     <div class="text-gray-400">No image</div>
                                 <?php endif; ?>
