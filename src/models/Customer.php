@@ -14,7 +14,7 @@ class Customer
 
     }
 
-    public function createCustomer(string $customerName, ?$connection)
+    public function createCustomer(string $customerName, $connection)
     {
         //If no connection is passed into this model
         //NOTE:: for the purpose that this should be within transaction

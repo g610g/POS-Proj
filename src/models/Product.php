@@ -22,10 +22,10 @@ class Product
             $name = trim($data['product_name'] ?? '');
             $price = floatval($data['price'] ?? 0);
             $stock = intval($data['stock'] ?? 0);
-            $product_image = $data['product_image'];
+            $product_image = $data['product_image'] ?? null;
 
 
-            consoleLog($product_image);
+            /* consoleLog($product_image); */
             $stmt = $this->dbConnection->prepare("INSERT INTO {$this->table} (product_name, price, stock, product_picture_path) VALUES (:product_name, :price, :stock, :product_picture_path)");
             $stmt->bindValue(':product_name', $name);
             $stmt->bindValue(':price', $price);
