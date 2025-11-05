@@ -12,15 +12,6 @@ if ($cart) {
     $cartCount = count($cart);
 }
 
-// If controller provides $products, use it. Otherwise fall back to example products.
-// if (!isset($products) || !is_array($products)) {
-//     $products = [
-//         ['product_id' => 1, 'product_name' => 'Frozen Beef - 1kg', 'price' => '₱250.00', 'stock' => 12, 'image' => '/assets/f42335844178bb1497255c0badc057c6.jpg'],
-//         ['product_id' => 2, 'product_name' => 'Frozen Pork - 1kg', 'price' => '₱220.00', 'stock' => 8, 'image' => '/assets/Olaf Digital Download - Used for any program, Cricuit, PhotoShop, Google, Microsoft - PNG,.jpg'],
-//         ['product_id' => 3, 'product_name' => 'Chicken Thigh - 1kg', 'price' => '₱180.00', 'stock' => 20, 'image' => '/assets/f42335844178bb1497255c0badc057c6.jpg'],
-//         ['product_id' => 4, 'product_name' => 'Ground Beef - 500g', 'price' => '₱140.00', 'stock' => 7, 'image' => '/assets/f42335844178bb1497255c0badc057c6.jpg'],
-//     ];
-// }
 ob_start();
 ?>
     <div class="py-6">

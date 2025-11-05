@@ -126,11 +126,39 @@ if (is_array($cart)) {
         </div>
     <?php endif; ?>
     <script>
+        const closeCheckoutButton = document.getElementById('close-checkout');
+        
+        closeCheckoutButton.addEventListener('click', () => {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.getElementById('checkout-modal').classList.remove('flex');
+        });
         const checkoutButton = document.getElementById('open-checkout');
         checkoutButton.addEventListener('click', () => {
             document.getElementById('checkout-modal').classList.remove('hidden');
             document.getElementById('checkout-modal').classList.add('flex');
         });
+        // Toggle card fields when payment method changes
+        (function(){
+            const cardFields = document.getElementById('card-fields');
+            const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+            if (!cardFields || !paymentRadios) return;
+
+            function updateFields(){
+                const selected = document.querySelector('input[name="payment_method"]:checked');
+                if (!selected) return;
+                const isCard = selected.value === 'card';
+                // show/hide
+                cardFields.style.display = isCard ? '' : 'none';
+                // toggle required attr
+                cardFields.querySelectorAll('input').forEach(i => {
+                    if (isCard) i.setAttribute('required','required'); else i.removeAttribute('required');
+                });
+            }
+
+            paymentRadios.forEach(r => r.addEventListener('change', updateFields));
+            // init
+            updateFields();
+        })();
     </script>
 </div>
 <?php
