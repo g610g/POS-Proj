@@ -86,6 +86,11 @@ if (is_array($cart)) {
                     </div>
 
                     <form id="checkout-form" action="/cart/checkout" method="POST" class="mt-4 space-y-4">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Customer Name</label>
+                            <input required name="customer_name" type="text" class="mt-1 block w-full px-3 py-2 border border-blue-200 rounded-lg" placeholder="Enter customer name">
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Payment Method</label>
                             <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">

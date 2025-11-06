@@ -77,6 +77,9 @@ class CartController
                 $totalOrderAmount += $cartItem['total_amount'];
             }
 
+            //NOTE:: continue here
+            $requestBody = $this->request->validated();
+            $customerName = $requestBody['customer_name'] ?? 'Guest';
             $stmtItem = $dbConnection->prepare("
                 INSERT INTO order_items (order_id, product_id, quantity, unit_price, sub_total)
                 VALUES (:order_id, :product_id, :quantity, :unit_price, :sub_total)
@@ -85,7 +88,7 @@ class CartController
             $productModel = new Product();
             $orderModel = new Order();
 
-            $lastInsertId = $orderModel->createOrder(['customer_name' => 'Gio Gonzales', 'total_amount' => $totalOrderAmount], $dbConnection);//NOTE::creates a new order in the database
+            $lastInsertId = $orderModel->createOrder(['customer_name' => $customerName, 'total_amount' => $totalOrderAmount], $dbConnection);//NOTE::creates a new order in the database
 
 
             foreach ($cartData as $productId => $cartItem) {
@@ -112,6 +115,7 @@ class CartController
                     'edit_price' => $productData['price'],
                 ], $productData, $dbConnection);
             }
+
             Session::unset('cart');
             $dbConnection->commit();
         } catch (Exception $e) {
